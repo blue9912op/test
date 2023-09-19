@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://kit.fontawesome.com/87122f15f9.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="js/jquery-3.js"></script>
+    <script>
+      $(function () {
+        $("#video_box2").hide();
+        $("#nav_li>li:first").on("click", function () {
+          $("#video_box").fadeIn();
+          $("#video_box2").fadeOut();
+          $("#nav_li>li:first").addClass("sel");
+          $("#nav_li>li:first").siblings().removeClass("sel");
+        });
+        $("#nav_li>li:last").on("click", function () {
+          $("#video_box2").fadeIn();
+          $("#video_box").fadeOut();
+          $("#nav_li>li:last").addClass("sel");
+          $("#nav_li>li:last").siblings().removeClass("sel");
+        });
+        //
+        //
+        // video_box js
+        //
+        //
+        var n = 0;
+        var pos = 0;
+        var videoLi = $("#video_list>li").length;
+        var wid = $("#video_list>li").innerWidth();
+        const vid = $("#video_list>li");
+
+        for (let i = 0; i < videoLi; i++) {
+          vid[i].addEventListener("mouseover", function (e) {
+            e.currentTarget.querySelector("video").play();
+          });
+        }
+        for (let i = 0; i < videoLi; i++) {
+          vid[i].addEventListener("mouseout", function (e) {
+            e.currentTarget.querySelector("video").pause();
+          });
+        }
+
+        $(".next").on("click", function () {
+          if (n < videoLi - 1) {
+            n++;
+          } else {
+            n = 0;
+          }
+          pos = n * wid;
+          $("#video_list").css({ marginLeft: -pos + "px" });
+        });
+
+        $(".prev").on("click", function () {
+          if (n == 0) {
+            n = 4;
+          } else {
+            n--;
+          }
+          pos = n * wid;
+          $("#video_list").css({ marginLeft: -pos + "px" });
+        });
+        window.addEventListener("resize", () => {
+          wid = $("#video_list>li").innerWidth();
+          $("#video_list").css({ marginLeft: 0 });
+          n = 0;
+        });
+
+        $("#video_list>li>video").on("click", function () {
+          let src = $(this).attr("src");
+          $("#main_video>video").attr("src", src);
+          $("#main_video").fadeIn();
+        });
+        $("#main_video").on("click", function () {
+          $("#main_video").fadeOut();
+        });
+
+        //
+        //
+        // video_box2 js
+        //
+        //
+
+        const vid2 = $("article");
+        for (let i = 0; i < videoLi; i++) {
+          vid2[i].addEventListener("mouseover", function (e) {
+            e.currentTarget.querySelector("video").play();
+            vid2[i].classList.add("scale");
+          });
+          vid2[i].addEventListener("click", function () {
+            let src2 = $(this).children("video").attr("src");
+            $(".main_video2>video").attr("src", src2);
+            $(".main_video2").addClass("active");
+            $(".main_video2>video").show();
+          });
+        }
+        $(".main_video2").on("click", function () {
+          $(".main_video2").removeClass("active");
+          $(".main_video2>video").fadeOut();
+        });
+
+        for (let i = 0; i < videoLi; i++) {
+          vid2[i].addEventListener("mouseout", function (e) {
+            e.currentTarget.querySelector("video").pause();
+            vid2[i].classList.remove("scale");
+          });
+        }
+      });
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Orbitron&family=Single+Day&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-size: 18px;
+        font-family: "Bungee Spice", cursive;
+        font-family: "Orbitron", sans-serif;
+        font-family: "Single Day", cursive;
+      }
+      ul {
+        list-style: none;
+      }
+      #wrap {
+        width: 100%;
+        height: 100vh;
+      }
+      header {
+        padding: 10px;
+        text-align: center;
+      }
+      header > h1 {
+        font-size: 3em;
+        margin: 30px;
+      }
+      header > ul {
+        width: 60%;
+        margin: 0 auto;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+      }
+      header > ul > li {
+        width: 40%;
+        padding: 1% 0;
+        margin: 1%;
+        border-radius: 30px;
+        border: 1px solid gray;
+        font-size: 1.2em;
+        transition: 0.5s;
+        cursor: pointer;
+      }
+      header > ul > li.sel {
+        background: skyblue;
+        transform: scale(1.3);
+      }
+
+      main {
+        position: relative;
+      }
+      main i {
+        color: #ccc;
+      }
+      .prev {
+        font-size: 3em;
+        position: absolute;
+        left: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        z-index: 50;
+      }
+      .next {
+        font-size: 3em;
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        z-index: 49;
+      }
+      #video_box {
+        width: 80%;
+        margin: 0 auto;
+        overflow: hidden;
+      }
+      #video_box2 {
+        width: 80%;
+        margin: 0 auto;
+        display: flex;
+      }
+      #video_box ul {
+        display: flex;
+        width: 500%;
+
+        user-select: none;
+        transition: 0.5s;
+      }
+      #video_box ul li {
+        text-align: center;
+        width: 100%;
+        cursor: pointer;
+      }
+      #video_box ul li video {
+        max-width: 100%;
+        object-fit: cover;
+      }
+
+      #video_box2 {
+        padding: 10px;
+        margin: 50px auto;
+        width: 90%;
+        display: flex;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%);
+      }
+      #video_box2 article {
+        flex: 1;
+        height: 50vh;
+        padding: 10px;
+        margin: 0 20px;
+        background: rgb(182, 231, 250);
+        display: flex;
+        flex-flow: column;
+        justify-content: space-around;
+        transition: 0.5s;
+      }
+      article:hover {
+        background: rgba(50, 136, 233, 0.7) !important;
+      }
+      article:hover video {
+        filter: saturate(100%);
+      }
+      .scale {
+        color: #2000d6;
+        transform: scale(1.2, 1.1);
+      }
+      article .text {
+        width: 100%;
+        padding: 20px;
+      }
+      article .text p {
+        font-size: 80%;
+      }
+      article .text h1 {
+        width: 100%;
+        font-size: 200%;
+        padding: 10px 0;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #56a4e9;
+      }
+      article video {
+        max-width: 100%;
+        object-fit: cover;
+        filter: saturate(10%);
+      }
+      #main_video {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 80;
+      }
+      #main_video video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .main_video2 {
+        position: fixed;
+        bottom: -100%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        transition: 1s;
+      }
+      .main_video2 video {
+        display: none;
+        max-width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .active {
+        bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <header>
+        <h1>비디오 갤러리 만들기</h1>
+        <ul id="nav_li">
+          <li class="sel">City</li>
+          <li>Ocean</li>
+        </ul>
+      </header>
+      <main>
+        <div id="video_box">
+          <button><i class="fa-solid fa-backward prev"></i></button>
+          <button><i class="fa-solid fas fa-forward next"></i></button>
+          <ul id="video_list">
+            <li><video src="video/city1.mp4"></video></li>
+            <li><video src="video/city2.mp4"></video></li>
+            <li><video src="video/city3.mp4"></video></li>
+            <li><video src="video/city4.mp4"></video></li>
+            <li><video src="video/city5.mp4"></video></li>
+          </ul>
+        </div>
+        <div id="video_box2">
+          <article>
+            <div class="text">
+              <h1>1번</h1>
+              <p>1번 동영상 설명</p>
+            </div>
+            <video src="video/ocean1.mp4"></video>
+          </article>
+          <article>
+            <div class="text">
+              <h1>2번</h1>
+              <p>2번 동영상 설명</p>
+            </div>
+            <video src="video/ocean2.mp4"></video>
+          </article>
+          <article>
+            <div class="text">
+              <h1>3번</h1>
+              <p>3번 동영상 설명</p>
+            </div>
+            <video src="video/ocean3.mp4"></video>
+          </article>
+          <article>
+            <div class="text">
+              <h1>4번</h1>
+              <p>4번 동영상 설명</p>
+            </div>
+            <video src="video/ocean4.mp4"></video>
+          </article>
+          <article>
+            <div class="text">
+              <h1>5번</h1>
+              <p>5번 동영상 설명</p>
+            </div>
+            <video src="video/ocean5.mp4"></video>
+          </article>
+        </div>
+      </main>
+      <div id="main_video">
+        <video src="video/city1.mp4" autoplay muted loop></video>
+      </div>
+      <div class="main_video2">
+        <video src="video/ocean1.mp4" autoplay muted loop></video>
+      </div>
+    </div>
+  </body>
+</html>
